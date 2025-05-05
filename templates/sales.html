@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Sales Dashboard{% endblock %}
+{% block content %}
+<h2 class="mb-4">Sales Dashboard</h2>
+
+<h3>Inquiries</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Message</th>
+            <th>Status</th>
+            <th>Response</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for inquiry in inquiries %}
+        <tr>
+            <td>{{ inquiry.inquiryID }}</td>
+            <td>{{ inquiry.name }}</td>
+            <td>{{ inquiry.email }}</td>
+            <td>{{ inquiry.message }}</td>
+            <td>{{ inquiry.status }}</td>
+            <td>{{ inquiry.response or 'N/A' }}</td>
+            <td>
+                {% if inquiry.status == 'pending' %}
+                <form method="POST" action="{{ url_for('sales') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="inquiryID" value="{{ inquiry.inquiryID }}">
+                    <div class="mb-2">
+                        <textarea class="form-control" name="response" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-primary">Respond</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3 class="mt-5">Orders</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Customer ID</th>
+            <th>Date</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.orderID }}</td>
+            <td>{{ order.customerID }}</td>
+            <td>{{ order.date }}</td>
+            <td>{{ order.total }}</td>
+            <td>{{ order.status }}</td>
+            <td>
+                <form method="POST" action="{{ url_for('update_order_status') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="orderID" value="{{ order.orderID }}">
+                    <select class="form-select form-select-sm mb-2" name="status" required>
+                        <option value="">Select status</option>
+                        <option value="processing">Processing</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                    <button type="submit" class="btn btn-sm btn-success">Update</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

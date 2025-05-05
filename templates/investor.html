@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Investor Dashboard{% endblock %}
+{% block content %}
+<h2 class="mb-4">Investor Dashboard</h2>
+
+<h3>Income Statements</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Month</th>
+            <th>Revenue</th>
+            <th>Expenses</th>
+            <th>Net Income</th>
+            <th>Chart</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for statement in statements %}
+        <tr>
+            <td>{{ statement.month }}</td>
+            <td>{{ statement.revenue }}</td>
+            <td>{{ statement.expenses }}</td>
+            <td>{{ statement.net_income }}</td>
+            <td>
+                {% if statement.chart_path %}
+                <a href="{{ statement.chart_path }}" target="_blank">View Chart</a>
+                {% else %}
+                N/A
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

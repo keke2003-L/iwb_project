@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Finance Dashboard{% endblock %}
+{% block content %}
+<h2 class="mb-4">Finance Dashboard</h2>
+
+<h3>Create Income Statement</h3>
+<form method="POST" action="{{ url_for('finance') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="mb-3">
+        <label for="month" class="form-label">Month (YYYY-MM)</label>
+        <input type="text" class="form-control" id="month" name="month" pattern="\d{4}-\d{2}" placeholder="YYYY-MM" required>
+    </div>
+    <div class="mb-3">
+        <label for="revenue" class="form-label">Revenue (M)</label>
+        <input type="number" step="0.01" class="form-control" id="revenue" name="revenue" required>
+    </div>
+    <div class="mb-3">
+        <label for="expenses" class="form-label">Expenses (M)</label>
+        <input type="number" step="0.01" class="form-control" id="expenses" name="expenses" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Create Statement</button>
+</form>
+
+<h3 class="mt-5">Income Statements</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Month</th>
+            <th>Revenue</th>
+            <th>Expenses</th>
+            <th>Net Income</th>
+            <th>Chart</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for statement in statements %}
+        <tr>
+            <td>{{ statement.month }}</td>
+            <td>{{ statement.revenue }}</td>
+            <td>{{ statement.expenses }}</td>
+            <td>{{ statement.net_income }}</td>
+            <td>
+                {% if statement.chart_path %}
+                <a href="{{ statement.chart_path }}" target="_blank">View Chart</a>
+                {% else %}
+                N/A
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}MFA Verification{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h2 class="mb-4">MFA Verification</h2>
+        <p>A one-time password (OTP) has been sent to your email. Please enter it below.</p>
+        <form method="POST" action="{{ url_for('mfa_verify') }}">
+            {{ csrf_token() }}
+            <div class="mb-3">
+                <label for="mfa_token" class="form-label">MFA Token</label>
+                <input type="text" class="form-control" id="mfa_token" name="mfa_token" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Verify</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

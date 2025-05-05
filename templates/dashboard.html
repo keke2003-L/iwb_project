@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h2 class="mb-4">Dashboard</h2>
+<h3>Welcome, {{ user.name }} ({{ role | capitalize }})</h3>
+
+{% if role == 'customer' %}
+<h4>Recent Orders</h4>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Date</th>
+            <th>Total</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in recent_orders %}
+        <tr>
+            <td>{{ order.orderID }}</td>
+            <td>{{ order.date }}</td>
+            <td>{{ order.total }}</td>
+            <td>{{ order.status }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% elif role == 'sales' %}
+<h4>Recent Inquiries</h4>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Message</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for inquiry in data %}
+        <tr>
+            <td>{{ inquiry.inquiryID }}</td>
+            <td>{{ inquiry.name }}</td>
+            <td>{{ inquiry.email }}</td>
+            <td>{{ inquiry.message }}</td>
+            <td>{{ inquiry.status }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% elif role == 'finance' or role == 'investor' %}
+<h4>Recent Income Statements</h4>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Month</th>
+            <th>Revenue</th>
+            <th>Expenses</th>
+            <th>Net Income</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for statement in data %}
+        <tr>
+            <td>{{ statement.month }}</td>
+            <td>{{ statement.revenue }}</td>
+            <td>{{ statement.expenses }}</td>
+            <td>{{ statement.net_income }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% elif role == 'developer' %}
+<h4>Recent Files</h4>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>File Name</th>
+            <th>Uploaded By</th>
+            <th>Uploaded At</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for file in data %}
+        <tr>
+            <td>{{ file.name }}</td>
+            <td>{{ file.uploaded_by }}</td>
+            <td>{{ file.uploaded_at }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+{% endblock %}
